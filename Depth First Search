@@ -1,0 +1,102 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define N 100
+#define Black 3
+#define Grey 2
+#define White 1
+
+int v,Edges,e1,e2,adj[N][N],i,Z[N],last=-1,s[N],state[N],count=0,r;
+
+void Input()
+{
+    printf("Enter the number of vertices: \n");
+    scanf("%d",&v);
+    for(i=1;i<=v;i++)
+    {
+        Z[i]=1;
+    }
+    Edges=v*(v-1);
+    printf("Input -1 -1 to conclude input.\n");
+    for(i=1;i<=Edges;i++)
+    {
+        printf("Enter the edges :\n");
+        scanf("%d %d",&e1,&e2);
+        if(e1==-1 && e2==-1)
+        {
+            break;
+        }
+        if(e1<0 || e1>v || e2<0 || e2>v)
+        {
+            printf("Incorrect input. Try again:\n");
+            i--;
+        }
+        else
+        {
+            adj[e1][e2]=1;
+        }
+    }
+}
+void State()
+{
+    for(i=1;i<=v;i++)
+    {
+        state[i]=White;
+    }
+}
+void DFS(int r)
+{
+    push(r);
+    state[r]=Grey;
+    while(count!=0)
+    {
+        r=s[last];
+        for(i=1;i<=v;i++)
+        {
+            if(adj[r][i]==1 && state[i]==White)
+            {
+                push(i);
+                state[i]=Grey;
+                r=i;
+            }
+        }
+        printf("%d ",r);
+        Z[r]=0;
+        state[r]=Black;
+        pop();
+    }
+    for(i=1;i<=v;i++)
+    {
+        if(Z[i]>0)
+        {
+            DFS(i);
+        }
+    }
+
+}
+void push(int r)
+{
+    last++;
+    s[last]=r;
+    count++;
+}
+void pop()
+{
+    if(count==0)
+    {
+        printf("Stack is empty\n");
+        return;
+    }
+    else
+    {
+        last--;
+        count--;
+    }
+}
+int main()
+{
+    Input();
+    State();
+    printf("Enter the start node: ");
+    scanf("%d",&r);
+    DFS(r);
+}
