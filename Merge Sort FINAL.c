@@ -40,24 +40,6 @@ void sort (int a[], int low, int high){
         return;
 }
 
-
-void insertionsort(int a[],int n)
-{
-    int i,j;
-    int key;
-    for (i=1;i<=n;i++)
-    {
-        key=a[i];
-        j=i-1;
-        while(j>=0 && a[j]>key)
-        {
-            a[j+1]=a[j];
-            j--;
-        }
-        a[j+1]=key;
-    }
-}
-
 int main()
 {
     struct timeval tv,tv1;
