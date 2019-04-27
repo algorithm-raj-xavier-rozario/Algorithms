@@ -1,0 +1,128 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define N 100
+#define Black 3
+#define Grey 2
+#define White 1
+
+int i,v,s,d,Edges,e1,e2,adj[N][N],state[N],count=0;
+
+typedef struct NODE
+{
+    int data;
+    struct NODE* next;
+}node;
+
+node* front = NULL;
+node* rear = NULL;
+
+void Input()
+{
+    printf("Enter the number of vertices: \n");
+    scanf("%d",&v);
+    Edges=(v*(v-1))/2;
+    printf("Input -1 -1 to conclude input.\n");
+    for(i=1;i<=Edges;i++)
+    {
+        printf("Enter the edges:\n");
+        scanf("%d %d",&e1,&e2);
+        if(e1==-1 && e2==-1)
+        {
+            break;
+        }
+        if(e1<0 || e1>v || e2<0 || e2>v)
+        {
+            printf("Incorrect input. Try again:\n");
+            i--;
+        }
+        else
+        {
+            adj[e1][e2]=1;
+            adj[e2][e1]=1;
+        }
+    }
+}
+void State()
+{
+    for(i=1;i<=v;i++)
+    {
+        state[i] = White;
+    }
+}
+void BFS()
+{
+    printf("Enter the starting node: ");
+    scanf("%d",&s);
+    enqueue(s);
+    s=Grey;
+    while(count!=0)
+    {
+        d=front->data;
+        dequeue();
+        for(i=1;i<=v;i++)
+        {
+            if((adj[d][i]==1 || adj[i][d]) && state[i]==White)
+            {
+                enqueue(i);
+                state[i]=Grey;
+            }
+        }
+        state[d]=Black;
+        printf("%d ",d);
+    }
+}
+void enqueue(int s)
+{
+    if(front==NULL)
+    {
+        rear=(node*)malloc(sizeof(node));
+        rear->data=s;
+        rear->next=NULL;
+        front=rear;
+    }
+    else
+    {
+        rear->next=(node*)malloc(sizeof(node));
+        rear->next->data=s;
+        rear->next->next=NULL;
+        rear=rear->next;
+    }
+    count++;
+}
+void dequeue()
+{
+    int ele;
+    if(front == NULL)
+    {
+        printf("Queue is empty\n");
+        return;
+    }
+    if(front->next == NULL)
+    {
+        front = NULL;
+        rear = NULL;
+    }
+    else
+    {
+        front = front->next;
+    }
+    count--;
+}
+int isempty()
+{
+    if(front==NULL)
+    {
+        printf("Empty\n");
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+int main()
+{
+    Input();
+    State();
+    BFS();
+}
